@@ -2,11 +2,11 @@ CXX= g++
 CXXFLAGS = -I/usr/local/include -Wall -std=c++1z
 LDFLAGS=-ljack
 # the cpp files from the current project to include
-SRC_PROJECT = stereo_main.cpp jack_module.cpp jack_module.h ringbuffer.cpp ringbuffer.h chorus.cpp chorus.h cbuffer.h cbuffer.cpp fxbase.cpp fxbase.h
+SRC_PROJECT = stereo_main.cpp chorus.cpp chorus.h cbuffer.h cbuffer.cpp fxbase.cpp fxbase.h
 # the directory to the folder with the shared modules
 SHAREDCODE_PATH = ../sharedCode/
 # the modules to include
-MODULES = oscillators
+MODULES = oscillators utilities
 TARGET=example
 
 # append shared code path prefix to modules
