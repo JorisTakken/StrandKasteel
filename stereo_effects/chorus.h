@@ -1,31 +1,28 @@
 #pragma once
-#include "fxbase.h"
-#include "cbuffer.h"
-#include "oscillator.h"
+#include <iostream>
+#include "circBuffer.h"
+#include "sine.h"
+#include "effect.h"
 
-class Chorus : public Effect
-{
-public:
-  Chorus(float samplerate, float modDepth, float feedback, float modSpeed);
-  ~Chorus();
+class Chorus : public Effect{
+    public:
+        Chorus(float modFreq, float modDepth, int delayMS,float feedback, float samplerate);
+        ~Chorus();
 
-  void applyEffect(float& input, float& output) override;
-  void delayMS(float delayInSamps);
-  void delaySamps(float delaySamps);
-  void setFeedback(float feedback1);
+        void setDelayMS(float delayMilsec);
 
-protected:
-  Oscillator* m_osc;
-  float m_modDepth;
-  float m_modSignal = 0;
-  float feedback;
-  float feedback1;
-  float samplerate;
-  float modSpeed;
-  Cbuffer cbuffer;
-  float delayInMS;
-  float delayInSamps;
+    protected:
+        void processEffect(float &input, float &output) override;
 
-  float delaytime;
+        CircBuffer* circBuffer;
+
+        int size;
+        int delaySamps;
+        float modulation;
+        float feedback;
+        int delayMS;
+        float modDepth;
+
+
 
 };

@@ -1,52 +1,38 @@
 #include "chorus.h"
-#include "sine.h"
 
-Chorus::Chorus(float samplerate, float modDepth, float feedback, float modSpeed) : Effect(),
-  m_modDepth(modDepth),
-  cbuffer(44100, 22050)
-  {
-  this->feedback = feedback;
-  this->samplerate = samplerate;
-  delayMS(0);
-
-  m_osc = new Sine(modSpeed, samplerate);
-
+Chorus::Chorus(float modFreq, float modDepth, int delayMS, float feedback, float samplerate) : Effect(samplerate),
+                                                                                                modDepth(modDepth),feedback(feedback),
+                                                                                                delayMS(delayMS)
+{
+    int delaySamps = msToSamps(delayMS);
+    this->delaySamps = delaySamps;
+    circBuffer = new CircBuffer(samplerate,delaySamps+4000);
+    oscillator = new Sine(modFreq,samplerate);
 }
 
-Chorus::~Chorus() {
-  delete m_osc;
-
-  m_osc = nullptr;
-
+Chorus::~Chorus(){
+    delete circBuffer;
+    circBuffer = nullptr;
+    delete oscillator;
+    oscillator = nullptr;
 }
 
-void Chorus::applyEffect(float& input, float& output){
+void Chorus::processEffect(float &input, float &output){
+    float modSig = (oscillator->genNextSample() + 1) /2;
+    setDelayMS(modSig * delayMS);
 
-  delaytime = (m_osc->genNextSample() + 3) ; //add amount changer
-  delayMS(delaytime);
-  output = m_modSignal + input;
+    output = input + modulation;
+    circBuffer->write(input + (output * feedback));
 
-  cbuffer.write((input + output * feedback) * 0.5);
+    float interpolation = circBuffer->read() - circBuffer->readNext();
 
-  m_modSignal = cbuffer.read() ;
-
-  // m_modSignal *= m_modDepth;
-  // m_modSignal += 1.0 - m_modDepth;
-
+    modulation = map(interpolation,0,1,circBuffer->read(),circBuffer->readNext());
+    modulation *= modDepth;
+    modulation += 1.0 - modDepth;
 }
 
-void Chorus::delayMS(float delayInMS){
-  delayInSamps = delayInMS * (samplerate / 1000);
-
-  cbuffer.setNumSamplesDelay(delayInSamps);
-
+void Chorus::setDelayMS(float delayMilsec){
+    int delayInSamps = msToSamps(delayMilsec);
+    circBuffer->setDelaySamps(delayInSamps);
 }
 
-void Chorus::delaySamps(float delaySamps){
-  cbuffer.setNumSamplesDelay(delaySamps);
-
-}
-
-void Chorus::setFeedback(float feedback1){
-  this->feedback = feedback1;
-}
