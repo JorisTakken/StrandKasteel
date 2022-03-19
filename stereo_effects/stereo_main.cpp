@@ -11,18 +11,19 @@
 #include "waveshaper.h"
 #include "tremolo.h"
 #include "sine.h"
+#include "tape_delay.h"
 
 unsigned long chunksize = 256;
 JackModule jack;
 float samplerate = 44100;
 
-enum effectChoice {chorus = 0, filter = 1, delay = 2, waveshaper = 3, tremolo = 4};
+enum effectChoice {chorus = 0, filter = 1, delay = 2, tapeDelay = 3, waveshaper = 4, tremolo = 5};
 
 bool running = true;
- 
+
 int main(int argc, char **argv){
 
-  
+
   jack.init(argv[0]);
   jack.autoConnect();
 
@@ -33,7 +34,7 @@ int main(int argc, char **argv){
   float *outbuffer = new float[chunksize];
 
     effectChoice effect;
-    effect = chorus;
+    effect = tapeDelay;
 
     Effect* effectL;
     Effect* effectR;
@@ -50,9 +51,13 @@ int main(int argc, char **argv){
           effectL = new Delay(samplerate,22050,0.5); // size, numSamplesDelay,  feedback
           effectR = new Delay(samplerate,22050,0.5);
           break;
+      case effectChoice::tapeDelay:
+          effectL = new TapeDelay(samplerate, 500, 0.4, 3, 2); // size, delayMS, feedback, modFreq, Drive
+          effectR = new TapeDelay(samplerate, 500, 0.4, 3, 2);
+          break;
       case effectChoice::waveshaper:
           effectL = new Waveshaper(1000); // int buffersize
-          effectR = new Waveshaper(1000); 
+          effectR = new Waveshaper(1000);
           // ((Waveshaper*)effectL)->genWaveshape(10.0);
           // ((Waveshaper*)effectR)->genWaveshape(10.0);
           ((Waveshaper*)effectL)->genWaveshapeOscillator(Waveshaper::WaveChoise::sine,10);
@@ -66,7 +71,7 @@ int main(int argc, char **argv){
     }
     effectL->setDrywet(1);
     effectR->setDrywet(1);
- 
+
 
   do{
     jack.readSamples(inbuffer,chunksize);
