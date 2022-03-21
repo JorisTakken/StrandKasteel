@@ -16,6 +16,7 @@ using namespace std;
 typedef unsigned int uint;
 
 int main (int argc, char **argv){
+
     Mat camera;
     Mat gray_camera;
     Mat edges;
@@ -36,6 +37,7 @@ int main (int argc, char **argv){
       HoughLinesP(edges, lines, 1, CV_PI/180, 10, 50, 200);
       
       // Draw lines on the camera
+
       for (size_t i=0; i<lines.size(); i++) {
           Vec4i l = lines[i];
           line(camera, Point(l[0], l[1]), Point(l[2], l[3]), Scalar(255, 230, 10), 3, LINE_AA);
@@ -46,3 +48,5 @@ int main (int argc, char **argv){
     }
     return 0;
 }
+
+
