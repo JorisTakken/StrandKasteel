@@ -21,7 +21,7 @@ int main (int argc, char **argv){
       return 0;
     }
     char* imageName = argv[1];
-    
+
     Mat image;
     Mat gray_image;
     Mat edges;
@@ -47,32 +47,3 @@ int main (int argc, char **argv){
 
 
 
-
-
-
-
-//     // Mat image;
-//     vector<vector<Point>> contours;
-//     vector<Vec4i> hierarchy;
-
-
-//     findContours(gray_image, contours, hierarchy, RETR_CCOMP, CHAIN_APPROX_SIMPLE);
-
-//     int idx = 0;
-//     for ( ; idx >= 0; idx = hierarchy[idx][0]){
-        
-//         // Scalar color(rand()&255,rand()&255,rand()&255);
-//         drawContours(gray_image,contours,idx,255,100,8,hierarchy);
-            
-//         }
-//         //display the image inside the window
-//         imshow("Display window", gray_image);
-
-
-//         //display time of the webcam frames
-//         waitKey(0);
-
-//       // }
-
-//     return(0);
-// }

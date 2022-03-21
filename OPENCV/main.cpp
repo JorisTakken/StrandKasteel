@@ -29,10 +29,6 @@ int main (int argc, char **argv){
 
       //insert the webcame fram inside matrix
       cap >> camera;
-
-
-
-
       cvtColor(camera, gray_camera, COLOR_BGR2GRAY);
 
       int h = gray_camera.rows;
