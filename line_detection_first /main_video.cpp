@@ -6,7 +6,6 @@
 #include <opencv2/highgui.hpp>
 #include <vector>
 #include "avaraging.h"
-#include "sine.h"
 
 
 
