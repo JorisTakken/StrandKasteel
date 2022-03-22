@@ -1,15 +1,23 @@
 #include "avaraging.h"
 
 Avaraging::Avaraging(float smoothingFactor) : smoothingFactor(smoothingFactor){
+    history = new float[smoothingFactor];
 }
 
 Avaraging::~Avaraging(){
 }
 
 float Avaraging::smooth(float input){
-    float avarage += (input) / 2; 
-    // lastSample = avarage; 
-    // std::cout << avarage << std::endl;
+    history[historyIndex] = input;
+    historyIndex ++; 
+    if (historyIndex > smoothingFactor){
+        historyIndex = 0;
+    }
+    
+    for (int i = 0; i < smoothingFactor; i ++){
+      avarage += history[i];
+    }
+    avarage = avarage / smoothingFactor;
     return avarage;
 }
 

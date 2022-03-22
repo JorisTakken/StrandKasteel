@@ -10,5 +10,7 @@ class Avaraging{
     protected:
         float smoothingFactor;
         float lastSample;
-
+        float avarage;
+        float* history;
+        int historyIndex = 0;
 };

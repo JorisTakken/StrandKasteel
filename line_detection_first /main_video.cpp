@@ -51,8 +51,6 @@ int main (int argc, char **argv){
       
       for (float i = 0; i < 44100; i++){
           float value = avarage.smooth(sine.genNextSample());
-          cout << value << endl;
-
       }
 
       imshow("Result camera", camera);
