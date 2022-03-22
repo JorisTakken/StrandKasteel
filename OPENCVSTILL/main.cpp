@@ -1,4 +1,5 @@
 //We used ciska's code for image processing, used session_04 code;
+// code is taken from https://learnopencv.com/find-center-of-blob-centroid-using-opencv-cpp-python/ , and altered by Rahsaan Bleijs 2022
 
 
 
@@ -36,6 +37,22 @@ int main (int argc, char **argv){
 
         }
       }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       Moments m = moments(gray_camera,true);
       Point p(m.m10/m.m00, m.m01/m.m00);
