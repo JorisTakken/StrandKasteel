@@ -31,6 +31,9 @@ void CentroidDetection::findingcontours(){
 
 void CentroidDetection::makePoints(){
     // make points 
+    vector<Moments>::size_type mu = contours.size();
+    vector<Point2f>::size_type mc = contours.size();    
+
     for( int i = 0; i<contours.size(); i++ ){ 
       mu[i] = moments(contours[i], false ); 
     }
