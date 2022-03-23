@@ -4,6 +4,10 @@ CentroidDetection::CentroidDetection(){
 }
 
 CentroidDetection::~CentroidDetection(){
+    delete mu;
+    delete mc;
+    mu = nullptr;
+    mc = nullptr;
 }
 
 
@@ -27,12 +31,13 @@ void CentroidDetection::edgeDetection(){
 
 void CentroidDetection::findingcontours(){
     findContours(canny_output, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
+    mu = new vector<Moments>(contours.size());
+    mc = new vector<Point2f>(contours.size()); 
 }   
 
 void CentroidDetection::makePoints(){
     // make points 
-    vector<Moments>::size_type mu = contours.size();
-    vector<Point2f>::size_type mc = contours.size();    
+     
 
     for( int i = 0; i<contours.size(); i++ ){ 
       mu[i] = moments(contours[i], false ); 
