@@ -16,5 +16,26 @@ class CentroidDetection{
     public:
         CentroidDetection();
         ~CentroidDetection();
+
+        void binaryImage(Mat& camera);
+        void edgeDetection();
+        void findingcontours();
+        void makePoints();
+
+        void drawPoints(Mat& camera);
+
         
+
+
+    protected:
+        Mat gray_camera;
+        Mat canny_output;
+        vector<vector<Point>> contours; //store contours into a vector of points (contours)
+                                        // dubble array
+        vector<Vec4i> hierarchy; //contains information about countour vector
+        // vector<Moments> mu(contours.size());
+        // vector<Point2f> mc(contours.size());
+
+
+
 };
