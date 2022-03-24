@@ -24,10 +24,8 @@ class CentroidDetection{
 
         void drawPoints(Mat& camera);
 
-        
-
-        
-
+        vector<Moments>mu;
+        vector<Point2f>mc;
 
     protected:
         Mat gray_camera;
@@ -36,8 +34,6 @@ class CentroidDetection{
                                         // dubble array
         vector<Vec4i> hierarchy; //contains information about countour vector
        
-        vector<Moments>*mu;
-        vector<Point2f>*mc;
-
+  
 
 };

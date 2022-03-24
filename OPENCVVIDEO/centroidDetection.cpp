@@ -4,10 +4,10 @@ CentroidDetection::CentroidDetection(){
 }
 
 CentroidDetection::~CentroidDetection(){
-    delete mu;
-    delete mc;
-    mu = nullptr;
-    mc = nullptr;
+    // delete mu;
+    // delete mc;
+    // mu = nullptr;
+    // mc = nullptr;
 }
 
 
@@ -15,6 +15,8 @@ void CentroidDetection::binaryImage(Mat& camera){
     cvtColor(camera, gray_camera, COLOR_BGR2GRAY);
     int h = gray_camera.rows;
     int w = gray_camera.cols;
+    cout << h<< endl;
+
 
     for(int i = 0; i < h; i++) {
         uchar* row = gray_camera.ptr<uchar>(i);
@@ -31,13 +33,20 @@ void CentroidDetection::edgeDetection(){
 
 void CentroidDetection::findingcontours(){
     findContours(canny_output, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
-    mu->resize(contours.size());
-    mc->resize(contours.size()); 
+    cout << contours.size() << endl;
+
+    
 }   
 
 void CentroidDetection::makePoints(){
     // make points 
-     
+
+    // std::vector<int> arr = std::vector<int> (20);
+    mu = vector<Moments>(contours.size());
+    mc = vector<Point2f>(contours.size());
+
+    // mu(contours.size());
+    // mc(contours.size()); 
 
     for( int i = 0; i<contours.size(); i++ ){ 
       mu[i] = moments(contours[i], false ); 
