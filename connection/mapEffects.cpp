@@ -17,41 +17,36 @@ unsigned long chunksize = 256;
 JackModule jack;
 float samplerate = 44100;
 
-using namespace std;
-
 bool running = true;
 
-
-    Effect* TapeDelayL = new TapeDelay(samplerate, 500, 0.2, 3, 0); // size, delayMS, feedback, modFreq, Drive
-    Effect* TapeDelayR = new TapeDelay(samplerate, 500, 0.2, 3, 0);
-
-    Effect* FilterL = new Filter(Filter::filterType::lowpass,1,0); //filterType, cutoff, LFOrate
-    Effect* FilterR = new Filter(Filter::filterType::lowpass,1,0);
-
-    Effect* ChorusL = new Chorus(1,1,50,0.0,samplerate);// modFreq, modDepth, delayMS, feedback, samplerate
-    Effect* ChorusR = new Chorus(1,1,50,0.0,samplerate);
-
-    Effect* TremoloL = new Tremolo(Tremolo::Waveformtype::sine, 1,0.2);// waveform,  modFreq, modDepht
-    Effect* TremoloR = new Tremolo(Tremolo::Waveformtype::sine, 1,0.2);
-
+using namespace std;
 
 
 static void filter(float DWtrem){
     float *inbuffer = new float[chunksize];
     float *outbuffer = new float[chunksize];
 
-    FilterL->setDrywet(1);
-    ChorusL->setDrywet(1);
+    Effect* TapeDelayL = new TapeDelay(samplerate, 500, 0.2, 3, 0); // size, delayMS, feedback, modFreq, Drive
+    Effect* TapeDelayR = new TapeDelay(samplerate, 500, 0.2, 3, 0);
+
+    Effect* FilterL = new Filter(Filter::filterType::highpass,1,0); //filterType, cutoff, LFOrate
+    Effect* FilterR = new Filter(Filter::filterType::lowpass,1,0);
+
+    Effect* ChorusL = new Chorus(1,1,50,0.0,samplerate);// modFreq, modDepth, delayMS, feedback, samplerate
+    Effect* ChorusR = new Chorus(1,1,50,0.0,samplerate);
+
+    Effect* TremoloL = new Tremolo(Tremolo::Waveformtype::sine, 1,1);// waveform,  modFreq, modDepht
+    Effect* TremoloR = new Tremolo(Tremolo::Waveformtype::sine, 1,1);
+
+    TapeDelayL->setDrywet(0);
+    FilterL->setDrywet(0);
+    ChorusL->setDrywet(0);
     TremoloL->setDrywet(0);
 
     TapeDelayR->setDrywet(0);
-    TapeDelayL->setDrywet(0);
-
-
-    FilterR->setDrywet(1);
-    ChorusR->setDrywet(1);
+    FilterR->setDrywet(0);
+    ChorusR->setDrywet(0);
     TremoloR->setDrywet(0);
-
 
 
     float outbufR;
@@ -65,10 +60,8 @@ static void filter(float DWtrem){
   do{
     jack.readSamples(inbuffer,chunksize);
     for(unsigned int x=0; x<chunksize; x++){
-
-
-      TapeDelayL->setDrywet(DWtrem);
-      TapeDelayR->setDrywet(DWtrem);
+      TremoloR->setDrywet(DWtrem);
+      TremoloL->setDrywet(DWtrem);
 
 
 
@@ -81,9 +74,8 @@ static void filter(float DWtrem){
       ChorusL->applyEffect(outbufR2, outbufR3);
       ChorusR->applyEffect(outbufL2, outbufL3);
 
-      TremoloL->applyEffect(outbufR3, outbuffer[2*x]);
+      TremoloL->applyEffect(outbufR3, outbuffer[2*x+1]);
       TremoloR->applyEffect(outbufL3, outbuffer[2*x+1]);
-
     }
 
 
@@ -107,9 +99,6 @@ static void filter(float DWtrem){
     // ChorusR = nullptr;
     // TremoloR = nullptr;
     // TremoloL = nullptr;
-    
-  
-
 }
 
 int main(int argc, char **argv){
@@ -119,13 +108,8 @@ int main(int argc, char **argv){
   jack.setNumberOfInputChannels(1);
   jack.setNumberOfOutputChannels(2);
 
-
-  float newTremoloDryWet;
-
-  std::thread filterThread(filter,newTremoloDryWet);
-
-
-
+  float DWtrem;
+  std::thread filterThread(filter,DWtrem);
 
   while(command != 'q')
   {
@@ -133,11 +117,8 @@ int main(int argc, char **argv){
       command = getchar();
 
       if(command == '+' || command == '=') {
-        newTremoloDryWet += 0.1;
-        TapeDelayR->setDrywet(newTremoloDryWet);
-
-        cout << newTremoloDryWet << endl;
-
+        DWtrem += 0.1;
+        cout << DWtrem << endl;
       };
       if(command == '-'){
         std::cout << "je hebt geklikt baas" << std::endl;
