@@ -5,10 +5,8 @@ LDFLAGS= -L/usr/local/lib/ -lopencv_calib3d -lopencv_core -lopencv_features2d -l
 LIBS = $(OPENCV)
 all: example
 
-
 example :  main.o
 	$(CC) -o $@ $(CFLAGS) main.o $(LDFLAGS)
-
 
 .cpp.o:
 	$(CC) -c $< $(CFLAGS) $(LIBS)

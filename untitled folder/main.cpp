@@ -13,14 +13,11 @@
 #define BLUEMASK (0x0000ff)
 
 using namespace cv;
-
 using namespace std;
-
 
 typedef unsigned int uint;
 
 int main (int argc, char **argv){
-
   // char* imageName = argv[1];
   // Mat image;
   Mat camera;
@@ -32,6 +29,12 @@ int main (int argc, char **argv){
 
       //insert the webcame fram inside matrix
       cap >> camera;
+
+
+
+
+      // cvtColor(camera, gray_camera, 41);
+
       cvtColor(camera, gray_camera, COLOR_BGR2GRAY);
 
       int h = gray_camera.rows;
@@ -41,6 +44,7 @@ int main (int argc, char **argv){
         uchar* row = gray_camera.ptr<uchar>(i);
         for(int j = 0; j < w; j++) {
           row[j] = row[j] > 80 ? 0 : 255;
+
         }
       }
 
@@ -53,5 +57,5 @@ int main (int argc, char **argv){
 
     }
 
-return(0);
+  return(0);
 }
