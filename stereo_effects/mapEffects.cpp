@@ -27,14 +27,14 @@ int main(int argc, char **argv){
   float *inbuffer = new float[chunksize];
   float *outbuffer = new float[chunksize];
 
-    Effect* TapeDelayL = new TapeDelay(samplerate, 100, 0.4, 3, 5); // size, delayMS, feedback, modFreq, Drive
-    Effect* TapeDelayR = new TapeDelay(samplerate, 500, 0.4, 3, 2);
+    Effect* TapeDelayL = new TapeDelay(samplerate, 500, 0.2, 3, 0); // size, delayMS, feedback, modFreq, Drive
+    Effect* TapeDelayR = new TapeDelay(samplerate, 500, 0.2, 3, 0);
 
-    Effect* FilterL = new Filter(Filter::filterType::highpass,1,0); //filterType, cutoff, LFOrate
-    Effect* FilterR = new Filter(Filter::filterType::highpass,1,0);
+    Effect* FilterL = new Filter(Filter::filterType::lowpass,1,0); //filterType, cutoff, LFOrate
+    Effect* FilterR = new Filter(Filter::filterType::lowpass,1,0);
 
-    Effect* ChorusL = new Chorus(1,1,100,0.0,samplerate);// modFreq, modDepth, delayMS, feedback, samplerate
-    Effect* ChorusR = new Chorus(1,1,100,0.0,samplerate);
+    Effect* ChorusL = new Chorus(1,1,50,0.0,samplerate);// modFreq, modDepth, delayMS, feedback, samplerate
+    Effect* ChorusR = new Chorus(1,1,50,0.0,samplerate);
 
     TapeDelayL->setDrywet(0.5);
     FilterL->setDrywet(1);
@@ -43,7 +43,6 @@ int main(int argc, char **argv){
     TapeDelayR->setDrywet(0.5);
     FilterR->setDrywet(1);
     ChorusR->setDrywet(0.5);
-
 
     float outbufR;
     float outbufR2;

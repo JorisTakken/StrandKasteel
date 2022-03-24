@@ -17,6 +17,7 @@ public:
   void processEffect(float& input, float &ouput) override;
 
   void setDelayMS(float delayMS);
+  void setFeedback(float newFeedback);
 
 
 protected:
