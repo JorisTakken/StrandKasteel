@@ -57,6 +57,14 @@ void CentroidDetection::makePoints(){
     }
 }
 
+void CentroidDetection::drawBigCentroid(Mat& camera){
+    Moments m = moments(gray_camera,true);
+    Point p(m.m10/m.m00, m.m01/m.m00);
+    cout<< Mat(p)<< endl;
+    // circle(camera,(447,63), 63, (0,0,255), -1);
+    circle(camera, p, 50, Scalar(255,0,0), -1);
+}
+
 void CentroidDetection::drawPoints(Mat& camera){
     binaryImage(camera);
     edgeDetection();
@@ -71,3 +79,5 @@ void CentroidDetection::drawPoints(Mat& camera){
       std::cout << mc[i] << std::endl;
     }
 }
+
+

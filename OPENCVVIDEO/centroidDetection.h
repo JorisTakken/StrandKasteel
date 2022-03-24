@@ -22,6 +22,7 @@ class CentroidDetection{
         void findingcontours();
         void makePoints();
 
+        void drawBigCentroid(Mat& camera);
         void drawPoints(Mat& camera);
 
         vector<Moments>mu;

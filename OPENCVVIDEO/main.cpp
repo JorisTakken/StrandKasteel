@@ -28,7 +28,7 @@ int main (int argc, char **argv){
 while(true){
   cap >> camera;
   detect.drawPoints(camera);
-
+  detect.drawBigCentroid(camera);
 
 
 //=======================================

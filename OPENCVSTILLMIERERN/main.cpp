@@ -61,7 +61,7 @@ int main (int argc, char **argv){
       mc[i] = Point2f(mu[i].m10/(mu[i].m00 + 1e-5), mu[i].m01/(mu[i].m00 + 1e-5)); 
     }
 
-    // draw points
+    // draw point
     Mat drawing(canny_output.size(), CV_8UC3, Scalar(255,255,255));
     for( int i = 0; i<contours.size(); i++ ){
         Scalar color = Scalar(167,151,111); // B G R values
