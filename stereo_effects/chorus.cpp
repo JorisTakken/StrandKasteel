@@ -1,8 +1,9 @@
 #include "chorus.h"
 
 Chorus::Chorus(float modFreq, float modDepth, int delayMS, float feedback, float samplerate) : Effect(samplerate),
-                                                                                                modDepth(modDepth),feedback(feedback),
-                                                                                                delayMS(delayMS)
+                                                                                                feedback(feedback), delayMS(delayMS),
+                                                                                                modDepth(modDepth)
+
 {
     int delaySamps = msToSamps(delayMS);
     this->delaySamps = delaySamps;
@@ -35,4 +36,3 @@ void Chorus::setDelayMS(float delayMilsec){
     int delayInSamps = msToSamps(delayMilsec);
     circBuffer->setDelaySamps(delayInSamps);
 }
-

@@ -32,7 +32,6 @@ void TapeDelay::processEffect(float &input, float &output)
   float modSig = (osc->genNextSample() + 1);
   setDelayMS(delayMS + modSig);
 
-
   //filter
   output = ((oscFilter->genNextSample()) * input) + ((1 - oscFilter->genNextSample()) * lastSample);
   lastSample = input;
