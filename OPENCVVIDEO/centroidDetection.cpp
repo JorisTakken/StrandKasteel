@@ -31,8 +31,8 @@ void CentroidDetection::edgeDetection(){
 
 void CentroidDetection::findingcontours(){
     findContours(canny_output, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
-    mu = new vector<Moments>(contours.size());
-    mc = new vector<Point2f>(contours.size()); 
+    mu->resize(contours.size());
+    mc->resize(contours.size()); 
 }   
 
 void CentroidDetection::makePoints(){
