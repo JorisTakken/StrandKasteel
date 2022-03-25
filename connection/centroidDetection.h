@@ -2,6 +2,7 @@
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
+#pragma once
 
 #define REDMASK	(0xff0000)
 #define GREENMASK (0x00ff00)

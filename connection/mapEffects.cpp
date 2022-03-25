@@ -15,7 +15,7 @@
 #define GREENMASK (0x00ff00)
 #define BLUEMASK (0x0000ff)
 
-using namespace cv;
+// using namespace cv;
 using namespace std;
 
 typedef unsigned int uint;
@@ -27,11 +27,6 @@ typedef unsigned int uint;
 #include "tremolo.h"
 #include "sine.h"
 #include "tape_delay.h"
-
-VideoCapture* cap = nullptr;
-Mat camera;
-
-CentroidDetection detect;
 
 unsigned long chunksize = 256;
 JackModule jack;
@@ -126,29 +121,31 @@ static void filter(){
     // TremoloR = nullptr;
     // TremoloL = nullptr;
 }
-
-static void video(){
-
-  while(running){
-    (*cap) >> camera;
-    // detect.drawPoints(camera);
-    // detect.drawBigCentroid(camera);
-    // imshow("Display window", camera);
-    waitKey(25);
-  }
-}
   
 int main(int argc, char **argv){
-  cap = new VideoCapture(0);
-
   char command='@';
   jack.init(argv[0]);
   jack.autoConnect();
   jack.setNumberOfInputChannels(1);
   jack.setNumberOfOutputChannels(2);
+
+
+  VideoCapture cap;
+  Mat camera;
+  CentroidDetection detect;
   
+  while(running){
+    cap >> camera;
+    detect.drawPoints(camera);
+    detect.drawBigCentroid(camera);
+    imshow("Display window", camera);
+    waitKey(250);
+  }
+
   thread filterThread(filter);
-  thread videoThread(video);
+  // thread videoThread(video);
+
+
 
   while(command != 'q')
   {
@@ -157,10 +154,15 @@ int main(int argc, char **argv){
     }
     usleep(100000);
   }
+
+
+
+
   running=false;
-  // filterThread.join();
-  videoThread.join();
+  filterThread.join();
+  // videoThread.join();
   jack.end();
+  return(0);
 }
 
 
