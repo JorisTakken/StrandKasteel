@@ -47,5 +47,11 @@ while(true){
       //display time of the webcam frames
       waitKey(25);
         // return(0);
-      }
     }
+  running=false;
+  filterThread.join();
+
+  jack.end();
+
+  return 0;
+}

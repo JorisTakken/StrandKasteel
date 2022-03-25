@@ -7,82 +7,108 @@
 #include "keypress.h"
 #include "bufferDebugger.h"
 
+#include <opencv2/core.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/highgui.hpp>
+  
+#define REDMASK	(0xff0000)
+#define GREENMASK (0x00ff00)
+#define BLUEMASK (0x0000ff)
+
+using namespace cv;
+using namespace std;
+
+typedef unsigned int uint;
+
+#include "centroidDetection.h"
+
 #include "chorus.h"
 #include "filter.h"
 #include "tremolo.h"
 #include "sine.h"
 #include "tape_delay.h"
 
+VideoCapture* cap = nullptr;
+Mat camera;
+
+CentroidDetection detect;
+
 unsigned long chunksize = 256;
 JackModule jack;
-float samplerate = 44100;
 
+float samplerate = 44100;
 bool running = true;
+float DWtrem;
 
 using namespace std;
 
+Effect* TapeDelayL = new TapeDelay(samplerate, 500, 0.2, 3, 0); // size, delayMS, feedback, modFreq, Drive
+Effect* TapeDelayR = new TapeDelay(samplerate, 500, 0.2, 3, 0);
 
-static void filter(float DWtrem){
-    float *inbuffer = new float[chunksize];
-    float *outbuffer = new float[chunksize];
+Effect* FilterL = new Filter(Filter::filterType::highpass,1,0); //filterType, cutoff, LFOrate
+Effect* FilterR = new Filter(Filter::filterType::lowpass,1,0);
 
-    Effect* TapeDelayL = new TapeDelay(samplerate, 500, 0.2, 3, 0); // size, delayMS, feedback, modFreq, Drive
-    Effect* TapeDelayR = new TapeDelay(samplerate, 500, 0.2, 3, 0);
+Effect* ChorusL = new Chorus(1,1,50,0.0,samplerate);// modFreq, modDepth, delayMS, feedback, samplerate
+Effect* ChorusR = new Chorus(1,1,50,0.0,samplerate);
 
-    Effect* FilterL = new Filter(Filter::filterType::highpass,1,0); //filterType, cutoff, LFOrate
-    Effect* FilterR = new Filter(Filter::filterType::lowpass,1,0);
-
-    Effect* ChorusL = new Chorus(1,1,50,0.0,samplerate);// modFreq, modDepth, delayMS, feedback, samplerate
-    Effect* ChorusR = new Chorus(1,1,50,0.0,samplerate);
-
-    Effect* TremoloL = new Tremolo(Tremolo::Waveformtype::sine, 1,1);// waveform,  modFreq, modDepht
-    Effect* TremoloR = new Tremolo(Tremolo::Waveformtype::sine, 1,1);
-
-    TapeDelayL->setDrywet(0);
-    FilterL->setDrywet(0);
-    ChorusL->setDrywet(0);
-    TremoloL->setDrywet(0);
-
-    TapeDelayR->setDrywet(0);
-    FilterR->setDrywet(0);
-    ChorusR->setDrywet(0);
-    TremoloR->setDrywet(0);
+Effect* TremoloL = new Tremolo(Tremolo::Waveformtype::sine, 1,1);// waveform,  modFreq, modDepht
+Effect* TremoloR = new Tremolo(Tremolo::Waveformtype::sine, 1,1);
 
 
-    float outbufR;
-    float outbufR2;
-    float outbufR3;
+static void filter(){
+  float *inbuffer = new float[chunksize];
+  float *outbuffer = new float[chunksize];
 
-    float outbufL;
-    float outbufL2;
-    float outbufL3;
+  TapeDelayL->setDrywet(1);
+  FilterL->setDrywet(0);
+  ChorusL->setDrywet(0);
+  TremoloL->setDrywet(0);
+
+  TapeDelayR->setDrywet(1);
+  FilterR->setDrywet(0);
+  ChorusR->setDrywet(0);
+  TremoloR->setDrywet(0);
+
+
+  float outbufR;
+  float outbufR2;
+  float outbufR3;
+
+  float outbufL;
+  float outbufL2;
+  float outbufL3;
 
   do{
     jack.readSamples(inbuffer,chunksize);
     for(unsigned int x=0; x<chunksize; x++){
-      TremoloR->setDrywet(DWtrem);
+      float input = inbuffer[x];
+      // TapeDelayL->applyEffect(input, outbuffer[2*x]);
+      // TapeDelayR->applyEffect(input, outbuffer[2*x+1]);
+      // outbuffer[2*x+1] = inbuffer[x];
+      // outbuffer[2*x] = inbuffer[x];
+
+      // ChorusL->applyEffect(inbuffer[x], outbuffer[2*x]);
+      // ChorusR->applyEffect(inbuffer[x],  outbuffer[2*x+1]);
+      // cout << outbufR << endl;
+
+
       TremoloL->setDrywet(DWtrem);
+      TremoloR->setDrywet(DWtrem);
 
-
-
-      TapeDelayL->applyEffect(inbuffer[x], outbufR);
-      TapeDelayR->applyEffect(inbuffer[x], outbufL);
-
-      FilterL->applyEffect(outbufR, outbufR2);
-      FilterR->applyEffect(outbufL,outbufL2);
+  
+      FilterL->applyEffect(input, outbufR2);
+      FilterR->applyEffect(input,outbufL2);
 
       ChorusL->applyEffect(outbufR2, outbufR3);
       ChorusR->applyEffect(outbufL2, outbufL3);
 
-      TremoloL->applyEffect(outbufR3, outbuffer[2*x+1]);
       TremoloR->applyEffect(outbufL3, outbuffer[2*x+1]);
+      TremoloL->applyEffect(outbufR3, outbuffer[2*x]);
     }
 
 
     jack.writeSamples(outbuffer,chunksize*2);
   } while(running);
-
-
     // delete TapeDelayL;
     // delete TapeDelayR;
     // delete FilterL;
@@ -101,36 +127,40 @@ static void filter(float DWtrem){
     // TremoloL = nullptr;
 }
 
+static void video(){
+
+  while(running){
+    (*cap) >> camera;
+    // detect.drawPoints(camera);
+    // detect.drawBigCentroid(camera);
+    // imshow("Display window", camera);
+    waitKey(25);
+  }
+}
+  
 int main(int argc, char **argv){
+  cap = new VideoCapture(0);
+
   char command='@';
   jack.init(argv[0]);
   jack.autoConnect();
   jack.setNumberOfInputChannels(1);
   jack.setNumberOfOutputChannels(2);
-
-  float DWtrem;
-  std::thread filterThread(filter,DWtrem);
+  
+  thread filterThread(filter);
+  thread videoThread(video);
 
   while(command != 'q')
   {
     if(keypressed()) {
       command = getchar();
-
-      if(command == '+' || command == '=') {
-        DWtrem += 0.1;
-        cout << DWtrem << endl;
-      };
-      if(command == '-'){
-        std::cout << "je hebt geklikt baas" << std::endl;
-      };
     }
     usleep(100000);
   }
-
   running=false;
-  filterThread.join();
-
+  // filterThread.join();
+  videoThread.join();
   jack.end();
-
-  return 0;
 }
+
+
