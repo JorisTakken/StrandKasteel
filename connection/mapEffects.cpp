@@ -130,7 +130,7 @@ void video() {
   while (running) {
     cap >> camera;
     detect.drawPoints(camera);
-    // detect.drawBigCentroid(camera);
+    detect.drawBigCentroid(camera);
 
     waitKey(250);
   } 
