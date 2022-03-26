@@ -19,8 +19,6 @@ using namespace cv;
 using namespace std;
 
 typedef unsigned int uint;
-VideoCapture cap(0);
-Mat camera;
 
 
 #include "centroidDetection.h"
@@ -30,6 +28,9 @@ Mat camera;
 #include "tremolo.h"
 #include "sine.h"
 #include "tape_delay.h"
+
+VideoCapture cap(0);
+Mat camera;
 
 unsigned long chunksize = 256;
 JackModule jack;
@@ -125,27 +126,31 @@ static void filter(){
     // TremoloL = nullptr;
 }
 
-void video() {
-  CentroidDetection detect;
-  while (running) {
-    cap >> camera;
-    detect.drawPoints(camera);
-    detect.drawBigCentroid(camera);
-  // imshow("Display window", camera);
+static void video(){
 
-    waitKey(250);
-  } 
-}   
-
+}
 int main(int argc, char **argv){
-  CentroidDetection detect;
   char command='@';
   jack.init(argv[0]);
   jack.autoConnect();
   jack.setNumberOfInputChannels(1);
   jack.setNumberOfOutputChannels(2);
+
   thread filterThread(filter);
-  thread t2(video);
+
+ 
+  CentroidDetection detect;
+  while (running) {
+    cap >> camera;
+    detect.drawPoints(camera);
+    detect.drawBigCentroid(camera);
+    imshow("Display window", camera);
+    for (int i = 0; i < 1000; i++){
+      float Xvaluse = detect.getXval(i);
+      cout << Xvaluse << endl;
+    }
+    waitKey(250);
+  } 
 
 
   while(command != 'q')
@@ -157,8 +162,10 @@ int main(int argc, char **argv){
   }
 
   running=false;
-  t2.join();
+  // t2.join();
   filterThread.join();
+  cap.release();
+
 
   jack.end();
 }

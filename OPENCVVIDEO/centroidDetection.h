@@ -24,17 +24,23 @@ class CentroidDetection{
 
         void drawBigCentroid(Mat& camera);
         void drawPoints(Mat& camera);
+        void listGen();
 
         vector<Moments>mu;
-        vector<Point2f>mc;
+        vector<Point2f>mc; // centroid point [x,y]
 
+
+        vector<float>xValues;
+        vector<float>yValues;
+        float x;
+        float y;
     protected:
         Mat gray_camera;
         Mat canny_output;
         vector<vector<Point>> contours; //store contours into a vector of points (contours)
                                         // dubble array
         vector<Vec4i> hierarchy; //contains information about countour vector
-       
-  
+
+
 
 };
