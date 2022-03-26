@@ -71,7 +71,6 @@ static void filter(float DWtrem){
       TapeDelayR->setDrywet(DWtrem);
 
 
-
       TapeDelayL->applyEffect(inbuffer[x], outbufR);
       TapeDelayR->applyEffect(inbuffer[x], outbufL);
 

@@ -76,7 +76,7 @@ void CentroidDetection::drawPoints(Mat& camera){
       Scalar color = Scalar(167,151,111); // B G R values
       drawContours(camera, contours, i, color, 2, 8, hierarchy, 0, Point());
       circle(camera, mc[i], 5, Scalar(0,0,0), -1, 8, 0);
-      std::cout << mc[i] << std::endl;
+    //   std::cout << mc[i] << std::endl;
     }
 }
 

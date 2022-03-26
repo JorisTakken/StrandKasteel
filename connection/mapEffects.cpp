@@ -131,6 +131,7 @@ void video() {
     cap >> camera;
     detect.drawPoints(camera);
     detect.drawBigCentroid(camera);
+  // imshow("Display window", camera);
 
     waitKey(250);
   } 
@@ -145,8 +146,6 @@ int main(int argc, char **argv){
   jack.setNumberOfOutputChannels(2);
   thread filterThread(filter);
   thread t2(video);
-
-  // imshow("Display window", camera);
 
 
   while(command != 'q')
