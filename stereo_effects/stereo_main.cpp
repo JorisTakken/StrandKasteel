@@ -7,8 +7,6 @@
 
 #include "chorus.h"
 #include "filter.h"
-#include "delay.h"
-#include "waveshaper.h"
 #include "tremolo.h"
 #include "sine.h"
 #include "tape_delay.h"
@@ -17,7 +15,7 @@ unsigned long chunksize = 256;
 JackModule jack;
 float samplerate = 44100;
 
-enum effectChoice {chorus = 0, filter = 1, delay = 2, tapeDelay = 3, waveshaper = 4, tremolo = 5};
+enum effectChoice {chorus = 0, filter = 1, delay = 2, tapeDelay = 3, tremolo = 4};
 
 bool running = true;
 
@@ -54,15 +52,6 @@ int main(int argc, char **argv){
       case effectChoice::tapeDelay:
           effectL = new TapeDelay(samplerate, 500, 0.4, 3, 2); // size, delayMS, feedback, modFreq, Drive
           effectR = new TapeDelay(samplerate, 500, 0.4, 3, 2);
-          break;
-      case effectChoice::waveshaper:
-          effectL = new Waveshaper(1000); // int buffersize
-          effectR = new Waveshaper(1000);
-          // ((Waveshaper*)effectL)->genWaveshape(10.0);
-          // ((Waveshaper*)effectR)->genWaveshape(10.0);
-          ((Waveshaper*)effectL)->genWaveshapeOscillator(Waveshaper::WaveChoise::sine,10);
-          ((Waveshaper*)effectR)->genWaveshapeOscillator(Waveshaper::WaveChoise::sine,10);
-          // ((Waveshaper*)effectR)->plot_waveshaper();
           break;
       case effectChoice::tremolo:
           effectL = new Tremolo(Tremolo::Waveformtype::sine, 1, 1); // Tremolo::Waveformtype:sine, modFreq, modDepht

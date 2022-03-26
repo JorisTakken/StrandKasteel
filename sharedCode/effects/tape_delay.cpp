@@ -27,7 +27,7 @@ TapeDelay::~TapeDelay()
 
 void TapeDelay::processEffect(float &input, float &output)
 {
-  // output = input;
+
   //add modulation to delayMS
   float modSig = ((osc->genNextSample() + 1) * 0.5);
   setDelayMS(delayMS + modSig);
@@ -46,8 +46,12 @@ void TapeDelay::processEffect(float &input, float &output)
   modulation = map(interpol, 0, 1, circ->read(), circ->readNext());
   
   //saturation
-  // output = sin(output * drive); // sine saturation
+  input = sin(input * drive); // sine saturation
   // input = tanh(input * drive); //tanH saturation
+
+
+
+  
 
 }
 

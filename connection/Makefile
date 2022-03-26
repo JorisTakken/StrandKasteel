@@ -1,12 +1,12 @@
 CXX= g++
-CXXFLAGS = -I/usr/local/include -Wall -std=c++1z
-LDFLAGS=-ljack
+CXXFLAGS = -I/usr/local/include/opencv4/ -Wall -std=c++1z
+LDFLAGS=-ljack -L/usr/local/lib/ -lopencv_calib3d -lopencv_core -lopencv_features2d -lopencv_flann -lopencv_highgui -lopencv_imgcodecs -lopencv_imgproc -lopencv_ml -lopencv_objdetect -lopencv_photo -lopencv_shape -lopencv_stitching -lopencv_superres -lopencv_video -lopencv_videoio -lopencv_videostab
 # the cpp files from the current project to include
-SRC_PROJECT = mapEffects.cpp chorus.cpp tremolo.cpp effect.cpp circBuffer.cpp filter.cpp tape_delay.cpp
+SRC_PROJECT = mapEffects.cpp centroidDetection.cpp
 # the directory to the folder with the shared modules
 SHAREDCODE_PATH = ../sharedCode/
 # the modules to include
-MODULES = oscillators utilities
+MODULES = oscillators utilities effects
 TARGET=example
 
 # append shared code path prefix to modules
@@ -33,7 +33,7 @@ $(TARGET):$(OBJ)
 
 # -o $*.o --> write .o file to the directory of the current target
 .cpp.o:
-	$(CXX) -c $< $(CXXFLAGS) -o $*.o
+	$(CXX) -c $< $(CXXFLAGS) $(LIBS) -o $*.o
 
 # plot:
 # 	python3 $(SHAREDCODE_PATH)stereoutils/plot.py
