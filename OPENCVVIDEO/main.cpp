@@ -24,18 +24,18 @@ int main (int argc, char **argv){
   VideoCapture cap(0);
 
   CentroidDetection detect;
-  
+
 while(true){
   cap >> camera;
   detect.drawPoints(camera);
   detect.drawBigCentroid(camera);
-
+  detect.listGen();
 
 //=======================================
       // Moments m = moments(gray_camera,true);
       // Point p(m.m10/m.m00, m.m01/m.m00);
       // cout<< Mat(p)<< endl;
-      
+
       // // cv.circle(img,(447,63), 63, (0,0,255), -1)
       // circle(camera, p, 5, Scalar(255,0,0), -1);
 //=======================================
@@ -45,7 +45,7 @@ while(true){
 
 
       //display time of the webcam frames
-      waitKey(25);
+      waitKey(250);
         // return(0);
       }
     }
