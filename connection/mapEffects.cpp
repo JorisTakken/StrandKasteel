@@ -15,10 +15,13 @@
 #define GREENMASK (0x00ff00)
 #define BLUEMASK (0x0000ff)
 
-// using namespace cv;
+using namespace cv;
 using namespace std;
 
 typedef unsigned int uint;
+VideoCapture cap(0);
+Mat camera;
+
 
 #include "centroidDetection.h"
 
@@ -121,30 +124,29 @@ static void filter(){
     // TremoloR = nullptr;
     // TremoloL = nullptr;
 }
-  
+
+void video() {
+  CentroidDetection detect;
+  while (running) {
+    cap >> camera;
+    detect.drawPoints(camera);
+    // detect.drawBigCentroid(camera);
+
+    waitKey(250);
+  } 
+}   
+
 int main(int argc, char **argv){
+  CentroidDetection detect;
   char command='@';
   jack.init(argv[0]);
   jack.autoConnect();
   jack.setNumberOfInputChannels(1);
   jack.setNumberOfOutputChannels(2);
-
-
-  VideoCapture cap;
-  Mat camera;
-  CentroidDetection detect;
-  
-  while(running){
-    cap >> camera;
-    detect.drawPoints(camera);
-    detect.drawBigCentroid(camera);
-    imshow("Display window", camera);
-    waitKey(250);
-  }
-
   thread filterThread(filter);
-  // thread videoThread(video);
+  thread t2(video);
 
+  // imshow("Display window", camera);
 
 
   while(command != 'q')
@@ -155,14 +157,11 @@ int main(int argc, char **argv){
     usleep(100000);
   }
 
-
-
-
   running=false;
+  t2.join();
   filterThread.join();
-  // videoThread.join();
+
   jack.end();
-  return(0);
 }
 
 
