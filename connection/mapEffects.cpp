@@ -10,7 +10,7 @@
 #include <opencv2/core.hpp>
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
-  
+
 #define REDMASK	(0xff0000)
 #define GREENMASK (0x00ff00)
 #define BLUEMASK (0x0000ff)
@@ -94,7 +94,7 @@ static void filter(){
       TremoloL->setDrywet(DWtrem);
       TremoloR->setDrywet(DWtrem);
 
-  
+
       FilterL->applyEffect(input, outbufR2);
       FilterR->applyEffect(input,outbufL2);
 
@@ -138,19 +138,20 @@ int main(int argc, char **argv){
 
   thread filterThread(filter);
 
- 
+
   CentroidDetection detect;
   while (running) {
     cap >> camera;
     detect.drawPoints(camera);
     detect.drawBigCentroid(camera);
+    detect.listGen();
     imshow("Display window", camera);
     for (int i = 0; i < 1000; i++){
       float Xvaluse = detect.getXval(i);
-      cout << Xvaluse << endl;
+      // cout << Xvaluse << endl;
     }
     waitKey(250);
-  } 
+  }
 
 
   while(command != 'q')
@@ -169,5 +170,3 @@ int main(int argc, char **argv){
 
   jack.end();
 }
-
-

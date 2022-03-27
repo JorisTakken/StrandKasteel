@@ -78,20 +78,38 @@ void CentroidDetection::drawPoints(Mat& camera){
 }
 
 void CentroidDetection::listGen(){
+  // TODO :GROUPING, AVERAGING, LINMAP
+  // creating vectors for x and y
+  xValues = vector<float>(mc.size());
+  yValues = vector<float>(mc.size());
+
+  // putting coordinates into separate lists
   for(int i = 0; i < mc.size(); i++){
-    if(mc[i] != Point2f(0)){
-      xValues = vector<float>(mc.size());
-      yValues = vector<float>(mc.size());
+    if(mc[i] != Point2f(0, 0)){
       xValues[i] = float(mc[i].x);
       yValues[i] = float(mc[i].y);
+    }
+  }
+  // sorting lists
+  std::sort(xValues.begin(), xValues.end());
+  std::sort(yValues.begin(), yValues.end());
 
-      // xValues[i] = xFloats[i];
-
-
+  // printing for confirmation // temporary
+  for(int i = 0; i<mc.size(); i++){
+    if(xValues[i] != 0){
+      std::cout << xValues[i] << " x" << std::endl;
+    }
+    if(yValues[i] != 0){
+      std::cout << yValues[i] << " y" << std::endl;
     }
   }
 
+
+
+
+
 }
+
 
 float CentroidDetection::getXval(int i){
   return xFloats[i];

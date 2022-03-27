@@ -37,6 +37,7 @@ class CentroidDetection{
         vector<float>xValues;
         vector<float>yValues;
 
+
         float *xFloats;
         float x;
         float y;
