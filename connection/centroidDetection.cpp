@@ -19,6 +19,7 @@ void CentroidDetection::binaryImage(Mat& camera){
     for(int i = 0; i < h; i++) {
         uchar* row = gray_camera.ptr<uchar>(i);
         for(int j = 0; j < w; j++) {
+            row[j] = row[j] * 0.35; //contrast down
             row[j] = row[j] > 80 ? 0 : 255;
         }
     }
@@ -77,13 +78,13 @@ void CentroidDetection::drawPoints(Mat& camera){
 }
 
 void CentroidDetection::listGen(){
-  for(int i = 0; i < mc.size();i++){
+  for(int i = 0; i < mc.size(); i++){
     if(mc[i] != Point2f(0)){
       xValues = vector<float>(mc.size());
       yValues = vector<float>(mc.size());
       xValues[i] = float(mc[i].x);
       yValues[i] = float(mc[i].y);
-      
+
       // xValues[i] = xFloats[i];
 
 
