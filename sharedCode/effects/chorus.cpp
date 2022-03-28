@@ -7,6 +7,8 @@ Chorus::Chorus(float modFreq, float modDepth, int delayMS, float feedback, float
 {
     int delaySamps = msToSamps(delayMS);
     this->delaySamps = delaySamps;
+    this->modFreq = modFreq;
+    this->modDepth = modDepth;
     circBuffer = new CircBuffer(samplerate,delaySamps+4000);
     oscillator = new Sine(modFreq,samplerate);
 }

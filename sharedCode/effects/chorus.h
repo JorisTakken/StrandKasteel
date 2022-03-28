@@ -21,6 +21,7 @@ class Chorus : public Effect{
 
         int size;
         int delaySamps;
+        float modFreq;
         float modulation;
         float feedback;
         int delayMS;

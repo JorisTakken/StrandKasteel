@@ -128,3 +128,16 @@ float CentroidDetection::getParam5(){
 float CentroidDetection::getParam6(){
   return  paramUnscaled[5];
 }
+
+float CentroidDetection::getParam7(){
+  return  paramUnscaled[6];
+}
+float CentroidDetection::getParam8(){
+  return  paramUnscaled[7];
+}
+float CentroidDetection::getParam9(){
+  return  paramUnscaled[8];
+}
+float CentroidDetection::getParam10(){
+  return  paramUnscaled[9];
+}

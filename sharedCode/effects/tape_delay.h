@@ -29,6 +29,7 @@ protected:
   CircBuffer* circ;
   int numSamples;
   int delayMS;
+  float modFrequency;
   float feedback;
   float drive;
   float modulation;

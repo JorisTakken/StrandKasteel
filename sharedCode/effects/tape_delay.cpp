@@ -9,7 +9,9 @@ TapeDelay::TapeDelay(int samplerate, int delayMS, float feedback, float modFrequ
 
   int numSamples = msToSamps(delayMS);
   this->numSamples = numSamples;
-
+  this->modFrequency = modFrequency;
+  this->feedback = feedback;
+  this->drive = drive;
 
   osc = new Sine(modFrequency, samplerate);
   oscFilter = new Sine(0.5, samplerate);
@@ -59,5 +61,5 @@ void TapeDelay::setDrive(float newDrive){
 }
 
 void TapeDelay::setModFreq(float newModFreq){
-  modFreq = newModFreq;
+  modFrequency = newModFreq;
 }
