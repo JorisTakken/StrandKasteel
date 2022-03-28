@@ -84,14 +84,14 @@ void CentroidDetection::listGen(){
     if(mc[i] != Point2f(0)){
       xValues[i] = float(mc[i].x);
       yValues[i] = float(mc[i].y);
-      std::cout << xValues[i] << std::endl;
+      // std::cout << xValues[i] << std::endl;
     }
   }
 
   for(int j = 0; j < 11; j++){
     if(j < 5){
-      std::cout << "hey" << std::endl;
-      paramUnscaled[j] = j;
+      z = 15;
+      paramUnscaled[j] = xValues[j];
     } else if (j > 4 && j < 10){
       std::cout << "ho" << std::endl;
       paramUnscaled[j] = j;
