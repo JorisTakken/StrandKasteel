@@ -76,7 +76,7 @@ float linMap(float input, float x1, float x2, float min, float max){
 static void audio(){
   float inbuffer[chunksize];
   float outbuffer[chunksize * 2];
-  
+
   float outbufR;
   float outbufR2;
   float outbufR3;
@@ -96,7 +96,7 @@ static void audio(){
   FilterR->setDrywet(1);
   ChorusR->setDrywet(1);
   TremoloR->setDrywet(1);
-  
+
   do{
     jack.readSamples(inbuffer,chunksize);
     for(unsigned int x=0; x<chunksize; x++){
@@ -105,18 +105,36 @@ static void audio(){
       outbuffer[2*x+1] = input;
       outbuffer[2*x] = input;
 
+      TapeDelayR->setDelayMS(param1);
+      TapeDelayL->setDelayMS(param1);
+      TapeDelayL->setFeedback(param2);
+      TapeDelayR->setFeedback(param2);
+      TapeDelayL->setDrive(param3);
+      TapeDelayR->setDrive(param3);
+      TapeDelayL->setModFreq(param4);
+      TapeDelayR->setModFreq(param4);
+      FilterR->setCutoff(param5);
+      FilterL->setCutoff(param5);
+      ChorusL->setModFreq(param6);
+      ChorusR->setModFreq(param6);
+      ChorusL->setModDepth(param7);
+      ChorusR->setModDepth(param7);
+      TremoloL->setModFreq(param8);
+      TremoloR->setModFreq(param8);
+      TremoloL->setModDepth(param9);
+      TremoloR->setModDepth(param9);
 
-      // FilterL->applyEffect(input, outbufR2);
-      // FilterR->applyEffect(input,outbufL2);
+      FilterL->applyEffect(input, outbufR2);
+      FilterR->applyEffect(input,outbufL2);
 
-      // ChorusL->applyEffect(outbufR2, outbufR3);
-      // ChorusR->applyEffect(outbufL2, outbufL3);
+      ChorusL->applyEffect(outbufR2, outbufR3);
+      ChorusR->applyEffect(outbufL2, outbufL3);
 
-      // TremoloR->applyEffect(outbufL3, outbufL4);
-      // TremoloL->applyEffect(outbufR3, outbufR4);
+      TremoloR->applyEffect(outbufL3, outbufL4);
+      TremoloL->applyEffect(outbufR3, outbufR4);
 
-      // TapeDelayL->applyEffect(outbufL4, outbuffer[2*x+1]);
-      // TapeDelayR->applyEffect(outbufR4, outbuffer[2*x]);
+      TapeDelayL->applyEffect(outbufL4, outbuffer[2*x+1]);
+      TapeDelayR->applyEffect(outbufR4, outbuffer[2*x]);
     }
 
     jack.writeSamples(outbuffer,chunksize*2);
@@ -176,19 +194,19 @@ int main(int argc, char **argv){
     detect.listGen();
     imshow("Display window", camera);
 
-    param1 = linMap(average1.smooth(detect.getParam1()),0, 2000, 0 ,1);
-    param2 = linMap(average2.smooth(detect.getParam2()),0, 2000, 0 ,1);
-    param3 = linMap(average3.smooth(detect.getParam3()),0, 2000, 0 ,1);
-    param4 = linMap(average4.smooth(detect.getParam4()),0, 2000, 0 ,1);
-    param5 = linMap(average5.smooth(detect.getParam5()),0, 2000, 0 ,1);
-    param6 = linMap(average6.smooth(detect.getParam6()),0, 2000, 0 ,1);
-    param7 = linMap(average7.smooth(detect.getParam7()),0, 2000, 0 ,1);
-    param8 = linMap(average8.smooth(detect.getParam8()),0, 2000, 0 ,1);
-    param9 = linMap(average9.smooth(detect.getParam9()),0, 2000, 0 ,1);
-    param10 = linMap(average10.smooth(detect.getParam10()),0, 2000, 0 ,1);
+    param1 = linMap(average1.smooth(detect.getParam1()),0, 2000, 0 ,1500); // tapedelay tijd
+    param2 = linMap(average2.smooth(detect.getParam2()),0, 2000, 0 ,0.3); // tapedelay feedback
+    param3 = linMap(average3.smooth(detect.getParam3()),0, 2000, 0 ,2); // tapedelay drive
+    param4 = linMap(average4.smooth(detect.getParam4()),0, 2000, 0 ,10); // tapedelay modFreq
+    param5 = linMap(average5.smooth(detect.getParam5()),0, 2000, 0.5 ,1); // filter cutoff
+    param6 = linMap(average6.smooth(detect.getParam6()),0, 2000, 0 ,5); // chorus modFreq
+    param7 = linMap(average7.smooth(detect.getParam7()),0, 2000, 0 ,1); // chorus modDepth
+    param8 = linMap(average8.smooth(detect.getParam8()),0, 2000, 0 ,10); // tremolo modFreq
+    param9 = linMap(average9.smooth(detect.getParam9()),0, 2000, 0 ,1); // tremolo modDepth
+    param10 = linMap(average10.smooth(detect.getParam10()),0, 2000, 0 ,1); // overal drywet
 
     waitKey(250);
-    
+
   }
 
   while(command != 'q')

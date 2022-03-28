@@ -102,12 +102,6 @@ void CentroidDetection::listGen(){
     // std::cout << paramUnscaled[l] << std::endl;
   }
   std::cout << "klaar" << std::endl;
-<<<<<<< HEAD
-}
-
-float CentroidDetection::getXval(int i){
-  return xFloats[i];
-=======
   // paramUnscaled[j] = xValues[j];
 }
 
@@ -117,7 +111,6 @@ float CentroidDetection::getParam1(){
 
 float CentroidDetection::getParam2(){
   return  paramUnscaled[1];
-
 }
 
 float CentroidDetection::getParam3(){
@@ -134,5 +127,4 @@ float CentroidDetection::getParam5(){
 
 float CentroidDetection::getParam6(){
   return  paramUnscaled[5];
->>>>>>> 332c85fdcdca16a443845da317ce74a5f8071bd4
 }
