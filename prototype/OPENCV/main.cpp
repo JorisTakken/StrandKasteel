@@ -13,14 +13,11 @@
 #define BLUEMASK (0x0000ff)
 
 using namespace cv;
-
 using namespace std;
-
 
 typedef unsigned int uint;
 
 int main (int argc, char **argv){
-
   // char* imageName = argv[1];
   // Mat image;
   Mat camera;

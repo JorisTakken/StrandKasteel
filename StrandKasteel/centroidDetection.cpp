@@ -4,10 +4,6 @@ CentroidDetection::CentroidDetection(){
 }
 
 CentroidDetection::~CentroidDetection(){
-    // delete mu;
-    // delete mc;
-    // mu = nullptr;
-    // mc = nullptr;
 }
 
 
@@ -103,11 +99,6 @@ void CentroidDetection::listGen(){
       std::cout << yValues[i] << " y" << std::endl;
     }
   }
-
-
-
-
-
 }
 
 
