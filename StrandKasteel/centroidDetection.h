@@ -41,6 +41,11 @@ class CentroidDetection{
         float *xFloats;
         float x;
         float y;
+
+
+        float paramUnscaled[11] = {0,0,0,0,0,0,0,0,0,0,0};
+
+
     protected:
         Mat gray_camera;
         Mat canny_output;

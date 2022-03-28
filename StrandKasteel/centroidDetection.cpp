@@ -15,8 +15,8 @@ void CentroidDetection::binaryImage(Mat& camera){
     for(int i = 0; i < h; i++) {
         uchar* row = gray_camera.ptr<uchar>(i);
         for(int j = 0; j < w; j++) {
-            row[j] = row[j] * 0.35; //contrast down
-            row[j] = row[j] > 80 ? 0 : 255;
+            row[j] = row[j] * 0.5; //contrast down
+            row[j] = row[j] > 90 ? 0 : 255; //making image binary
         }
     }
 }
@@ -68,7 +68,7 @@ void CentroidDetection::drawPoints(Mat& camera){
     for( int i = 0; i<contours.size(); i++ ){
       Scalar color = Scalar(167,151,111); // B G R values
       drawContours(camera, contours, i, color, 2, 8, hierarchy, 0, Point());
-      circle(camera, mc[i], 5, Scalar(0,0,0), -1, 8, 0);
+      circle(camera, mc[i], 5, Scalar(0,255,0), -1, 8, 0);
     //   std::cout << mc[i] << std::endl;
     }
 }
@@ -81,25 +81,35 @@ void CentroidDetection::listGen(){
 
   // putting coordinates into separate lists
   for(int i = 0; i < mc.size(); i++){
-    if(mc[i] != Point2f(0, 0)){
+    if(mc[i] != Point2f(0)){
       xValues[i] = float(mc[i].x);
       yValues[i] = float(mc[i].y);
+      std::cout << xValues[i] << std::endl;
     }
   }
-  // sorting lists
-  std::sort(xValues.begin(), xValues.end());
-  std::sort(yValues.begin(), yValues.end());
 
-  // printing for confirmation // temporary
-  for(int i = 0; i<mc.size(); i++){
-    if(xValues[i] != 0){
-      std::cout << xValues[i] << " x" << std::endl;
-    }
-    if(yValues[i] != 0){
-      std::cout << yValues[i] << " y" << std::endl;
+  for(int j = 0; j < 11; j++){
+    if(j < 5){
+      std::cout << "hey" << std::endl;
+      paramUnscaled[j] = j;
+    } else if (j > 4 && j < 10){
+      std::cout << "ho" << std::endl;
+      paramUnscaled[j] = j;
+    } else if(j == 10) {
+      std::cout << "klaar" << std::endl;
+      paramUnscaled[j] = j;
     }
   }
+
+  for ( int l = 0 ; l < 11; l++){
+    std::cout << paramUnscaled[l] << std::endl;
+  }
+  std::cout << "klaar" << std::endl;
+
+  // paramUnscaled[j] = xValues[j];
+
 }
+
 
 
 float CentroidDetection::getXval(int i){

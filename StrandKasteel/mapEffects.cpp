@@ -55,7 +55,6 @@ Effect* TremoloR = new Tremolo(Tremolo::Waveformtype::sine, 1,1);
 static void audio(){
   float inbuffer[chunksize];
   float outbuffer[chunksize * 2];
-  memset(&outbuffer,0,sizeof(inbuffer))
 
   float outbufR;
   float outbufR2;
@@ -81,8 +80,7 @@ static void audio(){
     jack.readSamples(inbuffer,chunksize);
     for(unsigned int x=0; x<chunksize; x++){
       float input = inbuffer[x];
-      TremoloL->setDrywet(DWtrem);
-      TremoloR->setDrywet(DWtrem);
+
 
       FilterL->applyEffect(input, outbufR2);
       FilterR->applyEffect(input,outbufL2);
