@@ -41,7 +41,6 @@ class CentroidDetection{
         float *xFloats;
         float x;
         float y;
-        float z;
 
         float paramUnscaled[11] = {0,0,0,0,0,0,0,0,0,0,0};
 

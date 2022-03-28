@@ -15,7 +15,7 @@ void CentroidDetection::binaryImage(Mat& camera){
     for(int i = 0; i < h; i++) {
         uchar* row = gray_camera.ptr<uchar>(i);
         for(int j = 0; j < w; j++) {
-            row[j] = row[j] * 0.5; //contrast down
+            row[j] = row[j] * 0.80; //contrast down
             row[j] = row[j] > 90 ? 0 : 255; //making image binary
         }
     }
@@ -84,19 +84,15 @@ void CentroidDetection::listGen(){
     if(mc[i] != Point2f(0)){
       xValues[i] = float(mc[i].x);
       yValues[i] = float(mc[i].y);
-      // std::cout << xValues[i] << std::endl;
     }
   }
 
   for(int j = 0; j < 11; j++){
     if(j < 5){
-      z = 15;
       paramUnscaled[j] = xValues[j];
     } else if (j > 4 && j < 10){
-      std::cout << "ho" << std::endl;
-      paramUnscaled[j] = j;
+      paramUnscaled[j] = yValues[j];
     } else if(j == 10) {
-      std::cout << "klaar" << std::endl;
       paramUnscaled[j] = j;
     }
   }
