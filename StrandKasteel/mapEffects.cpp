@@ -129,7 +129,7 @@ int main(int argc, char **argv){
     cap >> camera;
     detect.drawPoints(camera);
     detect.drawBigCentroid(camera);
-    // detect.listGen();
+    detect.listGen();
     imshow("Display window", camera);
     waitKey(250);
   }
