@@ -26,8 +26,20 @@ class CentroidDetection{
         void drawPoints(Mat& camera);
         void listGen();
 
-        float getXval(int i);
-        float getYval();
+        float getParam1();
+        float getParam2();
+        float getParam3();
+        float getParam4();
+        float getParam5();
+
+        float getParam6();
+        float getParam7();
+        float getParam8();
+        float getParam9();
+        float getParam10();
+
+        float getBigParam();
+
 
 
         vector<Moments>mu;

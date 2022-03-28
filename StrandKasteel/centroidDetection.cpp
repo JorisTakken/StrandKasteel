@@ -65,7 +65,7 @@ void CentroidDetection::drawPoints(Mat& camera){
     makePoints();
 
     Mat drawing(canny_output.size(), CV_8UC3, Scalar(255,255,255));
-    for( int i = 0; i<contours.size(); i++ ){
+    for( int i = 0; i<contours.size(); i++){
       Scalar color = Scalar(167,151,111); // B G R values
       drawContours(camera, contours, i, color, 2, 8, hierarchy, 0, Point());
       circle(camera, mc[i], 5, Scalar(0,255,0), -1, 8, 0);
@@ -98,16 +98,32 @@ void CentroidDetection::listGen(){
   }
 
   for ( int l = 0 ; l < 11; l++){
-    std::cout << paramUnscaled[l] << std::endl;
+    // std::cout << paramUnscaled[l] << std::endl;
   }
   std::cout << "klaar" << std::endl;
-
   // paramUnscaled[j] = xValues[j];
-
 }
 
+float CentroidDetection::getParam1(){
+  return  paramUnscaled[0];
+}
 
+float CentroidDetection::getParam2(){
+  return  paramUnscaled[1];
+}
 
-float CentroidDetection::getXval(int i){
-  return xFloats[i];
+float CentroidDetection::getParam3(){
+  return  paramUnscaled[2];
+}
+
+float CentroidDetection::getParam4(){
+  return  paramUnscaled[3];
+}
+
+float CentroidDetection::getParam5(){
+  return  paramUnscaled[4];
+}
+
+float CentroidDetection::getParam6(){
+  return  paramUnscaled[5];
 }
