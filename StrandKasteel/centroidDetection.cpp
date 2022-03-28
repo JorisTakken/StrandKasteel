@@ -87,7 +87,7 @@ void CentroidDetection::listGen(){
     }
   }
   std::cout << mc.size() << xValues.size() << std::endl;
-  
+
   for(int j = 0; j < 11; j++){
     if(j < 5){
       paramUnscaled[j] = xValues[j];
@@ -102,10 +102,7 @@ void CentroidDetection::listGen(){
     std::cout << paramUnscaled[l] << std::endl;
   }
   std::cout << "klaar" << std::endl;
-
 }
-
-
 
 float CentroidDetection::getXval(int i){
   return xFloats[i];

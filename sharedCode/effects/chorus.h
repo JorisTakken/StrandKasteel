@@ -10,6 +10,9 @@ class Chorus : public Effect{
         ~Chorus();
 
         void setDelayMS(float delayMilsec);
+        void setModFreq(float newModFreq);
+        void setModDepth(float newModDepth);
+
 
     protected:
         void processEffect(float &input, float &output) override;

@@ -34,7 +34,7 @@ void Tremolo::setModDepht(float newModDepht){
 }
 
 void Tremolo::processEffect(float &input, float &output){
-    // modSignal = range 0 - 1 ==== oscillator in range van -1 tot 1 
+    // modSignal = range 0 - 1 ==== oscillator in range van -1 tot 1
     float tremolo = (oscillator->genNextSample() + 1.0) * 0.5;
     tremolo *= modDepht;
     tremolo += 1.0 - modDepht;

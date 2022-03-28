@@ -36,3 +36,11 @@ void Chorus::setDelayMS(float delayMilsec){
     int delayInSamps = msToSamps(delayMilsec);
     circBuffer->setDelaySamps(delayInSamps);
 }
+
+void Chorus::setModFreq(float newModFreq){
+  modFreq = newModFreq;
+}
+
+void Chorus::setModDepth(float newModDepth){
+  modDepth = newModDepth;
+}

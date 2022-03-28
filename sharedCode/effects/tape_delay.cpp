@@ -53,3 +53,11 @@ void TapeDelay::setDelayMS(float delayMS){
 void TapeDelay::setFeedback(float newFeedback){
   feedback = newFeedback;
 }
+
+void TapeDelay::setDrive(float newDrive){
+  drive = newDrive;
+}
+
+void TapeDelay::setModFreq(float newModFreq){
+  modFreq = newModFreq;
+}

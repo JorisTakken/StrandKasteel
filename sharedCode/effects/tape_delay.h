@@ -18,6 +18,9 @@ public:
 
   void setDelayMS(float delayMS);
   void setFeedback(float newFeedback);
+  void setDrive(float newDrive);
+  void setModFreq(float newModFreq);
+
 
 
 protected:

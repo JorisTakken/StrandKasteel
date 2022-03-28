@@ -12,7 +12,7 @@ Filter::Filter(filterType type, float cutoff, float LFOrate) : Effect(samplerate
             change = 1;
             break;
         }
-    } 
+    }
 }
 
 Filter::~Filter(){
@@ -20,13 +20,11 @@ Filter::~Filter(){
 
 
 void Filter::processEffect(float& input, float &output){
-    output = ((0.5 + 0.5-cutoff) * input) + (change * (cutoff * lastSample)); 
-    lastSample = input; 
+    output = ((0.5 + 0.5-cutoff) * input) + (change * (cutoff * lastSample));
+    lastSample = input;
     setCutoff((oscillator->genNextSample() + 1) * 0.5);
 }
 
 void Filter::setCutoff(float newCutoff){
     this->cutoff = newCutoff * 0.5;
 }
-
-
