@@ -67,22 +67,20 @@ float param9;
 float param10;
 
 float linMap(float input, float x1, float x2, float min, float max){
-  // STARTING AT A X VALUE
     float value = (min * (x2 - input) + max * (input - x1)) / (x2 - x1);
     return value;
 }
 
 
 static void audio(){
+  // initializing variables
   float inbuffer[chunksize];
   float outbuffer[chunksize * 2];
 
-  float outbufR;
   float outbufR2;
   float outbufR3;
   float outbufR4;
 
-  float outbufL;
   float outbufL2;
   float outbufL3;
   float outbufL4;
@@ -101,10 +99,8 @@ static void audio(){
     jack.readSamples(inbuffer,chunksize);
     for(unsigned int x=0; x<chunksize; x++){
       float input = inbuffer[x];
-
-      outbuffer[2*x+1] = input;
-      outbuffer[2*x] = input;
-
+      
+      // setting parameters using sand data
       ((TapeDelay*)TapeDelayR)->setDelayMS(param1);
       ((TapeDelay*)TapeDelayL)->setDelayMS(param1);
       ((TapeDelay*)TapeDelayR)->setFeedback(param2);
@@ -124,6 +120,7 @@ static void audio(){
       ((Tremolo*)TremoloR)->setModDepht(param9);
       ((Tremolo*)TremoloL)->setModDepht(param9);
 
+      // effects chain input - > effects - > output
       FilterL->applyEffect(input, outbufR2);
       FilterR->applyEffect(input,outbufL2);
 
@@ -139,6 +136,7 @@ static void audio(){
 
     jack.writeSamples(outbuffer,chunksize*2);
   } while(running);
+   // deleting dynamic effects
     delete TapeDelayL;
     delete TapeDelayR;
     delete FilterL;
@@ -159,41 +157,43 @@ static void audio(){
 
 int main(int argc, char **argv){
   char command='@';
+  // initializing jack
   jack.init(argv[0]);
   jack.autoConnect();
   jack.setNumberOfInputChannels(2);
   jack.setNumberOfOutputChannels(2);
-
+ // setting moving average length
   Avaraging average1;
-  average1.setSmoothFactor(10);
+  average1.setSmoothFactor(100);
   Avaraging average2;
-  average2.setSmoothFactor(10);
+  average2.setSmoothFactor(100);
   Avaraging average3;
-  average3.setSmoothFactor(10);
+  average3.setSmoothFactor(100);
   Avaraging average4;
-  average4.setSmoothFactor(10);
+  average4.setSmoothFactor(100);
   Avaraging average5;
   average5.setSmoothFactor(1000);
   Avaraging average6;
-  average6.setSmoothFactor(10);
+  average6.setSmoothFactor(100);
   Avaraging average7;
-  average7.setSmoothFactor(10);
+  average7.setSmoothFactor(100);
   Avaraging average8;
-  average8.setSmoothFactor(10);
+  average8.setSmoothFactor(100);
   Avaraging average9;
-  average9.setSmoothFactor(10);
+  average9.setSmoothFactor(100);
   Avaraging average10;
-  average10.setSmoothFactor(10);
+  average10.setSmoothFactor(100);
 
   thread filterThread(audio);
 
   while (running) {
+    // initializing camera and centroid/blob/contourdetection
     cap >> camera;
     detect.drawPoints(camera);
     detect.drawBigCentroid(camera);
     detect.listGen();
     imshow("Display window", camera);
-
+    // linmapping parameters
     param1 = linMap(average1.smooth(detect.getParam1()),0, 2000, 0 ,1500); // tapedelay tijd
     param2 = linMap(average2.smooth(detect.getParam2()),0, 2000, 0 ,0.3); // tapedelay feedback
     param3 = linMap(average3.smooth(detect.getParam3()),0, 2000, 0 ,2); // tapedelay drive

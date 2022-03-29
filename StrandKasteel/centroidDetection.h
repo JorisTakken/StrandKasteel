@@ -40,8 +40,6 @@ class CentroidDetection{
 
         float getBigParam();
 
-
-
         vector<Moments>mu;
         vector<Point2f>mc; // centroid point [x,y]
 
@@ -63,7 +61,5 @@ class CentroidDetection{
         vector<vector<Point>> contours; //store contours into a vector of points (contours)
                                         // dubble array
         vector<Vec4i> hierarchy; //contains information about countour vector
-
-
 
 };

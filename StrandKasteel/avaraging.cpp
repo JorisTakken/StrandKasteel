@@ -1,13 +1,14 @@
 #include "avaraging.h"
 
 Avaraging::Avaraging(){
-    
+
 }
 
 Avaraging::~Avaraging(){
 }
 
 void Avaraging::setSmoothFactor(float smoothingFactor){
+  // length of the moving average list
     this->smoothingFactor = smoothingFactor;
     history = new float[smoothingFactor];
     for(int i = 0; i<smoothingFactor; i++ ){
@@ -16,8 +17,9 @@ void Avaraging::setSmoothFactor(float smoothingFactor){
 }
 
 float Avaraging::smooth(float input){
+  // creating a moving average
     history[historyIndex] = input;
-    historyIndex++; 
+    historyIndex++;
 
     if (historyIndex > smoothingFactor){
         historyIndex = 0;
@@ -35,6 +37,3 @@ float Avaraging::linMap(float input, int x1, int x2, float min, float max){
     float value = (min * (x2 - input) + max * (input - x1)) / (x2 - x1);
     return value;
 }
-
-
-

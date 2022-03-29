@@ -8,6 +8,7 @@ CentroidDetection::~CentroidDetection(){
 
 
 void CentroidDetection::binaryImage(Mat& camera){
+  // processing image to binary
     cvtColor(camera, gray_camera, COLOR_BGR2GRAY);
     int h = gray_camera.rows;
     int w = gray_camera.cols;
@@ -27,6 +28,7 @@ void CentroidDetection::edgeDetection(){
 }
 
 void CentroidDetection::findingcontours(){
+  // findingcontours
     findContours(canny_output, contours, hierarchy, RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0));
 
 
@@ -35,12 +37,8 @@ void CentroidDetection::findingcontours(){
 void CentroidDetection::makePoints(){
     // make points
 
-    // std::vector<int> arr = std::vector<int> (20);
     mu = vector<Moments>(contours.size());
     mc = vector<Point2f>(contours.size());
-
-    // mu(contours.size());
-    // mc(contours.size());
 
     for( int i = 0; i<contours.size(); i++ ){
       mu[i] = moments(contours[i], false );
@@ -52,6 +50,7 @@ void CentroidDetection::makePoints(){
 }
 
 void CentroidDetection::drawBigCentroid(Mat& camera){
+  // drawing the big blue centroid
     Moments m = moments(gray_camera,true);
     Point p(m.m10/m.m00, m.m01/m.m00);
     // circle(camera,(447,63), 63, (0,0,255), -1);
@@ -59,6 +58,7 @@ void CentroidDetection::drawBigCentroid(Mat& camera){
 }
 
 void CentroidDetection::drawPoints(Mat& camera){
+  // drawing contours and centroids on image
     binaryImage(camera);
     edgeDetection();
     findingcontours();
@@ -74,7 +74,6 @@ void CentroidDetection::drawPoints(Mat& camera){
 }
 
 void CentroidDetection::listGen(){
-  // TODO :GROUPING, AVERAGING, LINMAP
   // creating vectors for x and y
   xValues = vector<float>(mc.size());
   yValues = vector<float>(mc.size());
@@ -86,8 +85,7 @@ void CentroidDetection::listGen(){
       yValues[i] = float(mc[i].y);
     }
   }
-  std::cout << mc.size() << xValues.size() << std::endl;
-
+  // creating list to send to params
   for(int j = 0; j < 11; j++){
     if(j < 5){
       paramUnscaled[j] = xValues[j];
@@ -97,14 +95,8 @@ void CentroidDetection::listGen(){
       paramUnscaled[j] = j;
     }
   }
-
-  for ( int l = 0 ; l < 11; l++){
-    // std::cout << paramUnscaled[l] << std::endl;
-  }
-  std::cout << "klaar" << std::endl;
-  // paramUnscaled[j] = xValues[j];
 }
-
+// sending paramvalues
 float CentroidDetection::getParam1(){
   return  paramUnscaled[0];
 }
