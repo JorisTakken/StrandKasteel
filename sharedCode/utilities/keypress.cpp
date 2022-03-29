@@ -7,10 +7,7 @@
 
 fd_set readfds; // create an FD set
 
-
-
-int keypressed()
-{
+int keypressed(){
 struct timeval timeout;
 int retval;
 
@@ -28,22 +25,22 @@ int retval;
   return 0;
 } /* keypressed */
 
-// int main()
-// {
-// char nextchar='@';
+int _main()
+{
+char nextchar='@';
 
-//   while(nextchar != 'q')
-//   {
-//     printf(".\n");
-//     if(keypressed())
-//     {
-//       nextchar = getchar(); // clear input buffer
-//       printf("KEY '%c'\n",nextchar);
-//     }
-//     usleep(100000);
-//   }
+  while(nextchar != 'q')
+  {
+    printf(".\n");
+    if(keypressed())
+    {
+      nextchar = getchar(); // clear input buffer
+      printf("KEY '%c'\n",nextchar);
+    }
+    usleep(100000);
+  }
 
-//   return 0;
-// }
+  return 0;
+}
 
 
