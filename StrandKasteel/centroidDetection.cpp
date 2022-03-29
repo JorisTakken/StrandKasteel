@@ -1,4 +1,6 @@
 #include "centroidDetection.h"
+//We used ciska's code for image processing, used session_04 code;
+// code is taken from https://learnopencv.com/find-center-of-blob-centroid-using-opencv-cpp-python/ , and altered by Rahsaan Bleijs 2022
 
 CentroidDetection::CentroidDetection(){
 }
